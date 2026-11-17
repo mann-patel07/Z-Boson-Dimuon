@@ -1,0 +1,17 @@
+selection,step,cut,events
+Z,0,all events in file,100000
+Z,1,both muons global,93474
+Z,2,opposite charge,93474
+Z,3,|eta| < 2.4 for both,93474
+Jpsi,0,all events in file,100000
+Jpsi,1,both muons global,93474
+Jpsi,2,opposite charge,93474
+Jpsi,3,|eta| < 2.4 for both,93474
+scan,0,all events in file,100000
+scan,1,both muons global,93474
+scan,2,opposite charge,93474
+scan,3,|eta| < 2.4 for both,93474
+Z,4,pt > 20.0 GeV for both,5752
+Z,5,"mass in [70.0, 110.0)",5064
+Jpsi,4,"mass in [2.9, 3.3)",7270
+scan,4,"mass in [15.0, 60.0)",31121

@@ -1,0 +1,55 @@
+{
+  "n_events": 5064,
+  "range": [
+    70.0,
+    110.0
+  ],
+  "values": {
+    "mass": 90.79053839763128,
+    "sigma": 1.3099671049991648,
+    "lam": -0.04958746014379545,
+    "Ns": 4616.60862295992,
+    "Nb": 447.397658931728
+  },
+  "hesse_errors": {
+    "mass": 0.039796289516587535,
+    "sigma": 0.05421712673846579,
+    "lam": 0.007332857596370312,
+    "Ns": 76.31491387886399,
+    "Nb": 40.6828141714183
+  },
+  "minos": {
+    "lower": -0.03983808107028685,
+    "upper": 0.03976417121651196,
+    "valid": true
+  },
+  "valid": true,
+  "at_limit": false,
+  "at_limit_params": [],
+  "accurate_covariance": true,
+  "rerun": false,
+  "nll": -23776.053167943603,
+  "gof": {
+    "chi2": 102.04782415244291,
+    "ndof": 72,
+    "p_value": 0.011435406067059953,
+    "n_bins_used": 77,
+    "n_bins": 80
+  },
+  "mass": 90.79053839763128,
+  "stat_error": 0.039796289516587535,
+  "group_systematics": {
+    "1 background shape": 0.012015311277636442,
+    "2 fit range": 0.019776285991753184,
+    "3 muon pt threshold": 0.049871220512685,
+    "4 signal model": 0.0015586755326921775,
+    "5 likelihood type": 0.0004922080916003324
+  },
+  "indicative_systematic": 0.05500254145376024,
+  "total_error": 0.06788979470922465,
+  "reference_mass": 91.1879,
+  "reference_error": 0.002,
+  "difference_GeV": -0.39736160236871854,
+  "difference_in_stat_se": -9.984890732164711,
+  "difference_in_total_se": -5.853038797224795
+}

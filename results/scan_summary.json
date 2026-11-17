@@ -1,0 +1,22 @@
+{
+  "observed_max_z_local": 1.9605365319986494,
+  "observed_mass": 26.0,
+  "observed_S": 77.22117299358193,
+  "p_local": 0.024966556194011003,
+  "p_global": 0.7884231536926147,
+  "trials_factor": 31.57917125477411,
+  "n_toys": 500,
+  "n_toys_ge_observed": 394,
+  "toy_max_z_median": 2.254409356162009,
+  "toy_max_z_95pct": 3.116292430629493,
+  "background_gof_p_value": 0.936095605662408,
+  "background_gof_chi2": 66.96733017691926,
+  "background_gof_ndof": 86,
+  "gof_alpha": 0.01,
+  "background_model_poor": false,
+  "relative_resolution_r": 0.014428453979003409,
+  "n_test_masses": 87,
+  "n_events_scan": 31121,
+  "n_invalid_scan_fits_observed": 0,
+  "n_invalid_scan_fits_toys": 0
+}
