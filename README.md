@@ -11,6 +11,8 @@ I fit the Z boson mass in 5064 selected dimuon events from public CMS data with 
 
 The fitted mass is lower than the reference value by more than my total uncertainty, so the two do not agree within my uncertainties. Likely reasons are the missing final-state radiation in the model and an uncalibrated muon momentum scale. These are likely reasons, not proven ones.
 
+The nominal fit fixes the Z width at 2.4955 GeV, so it measures the mass and not the width. The J/psi control fit gives 3.09346 GeV against 3.09690 GeV (-0.111 percent), with a fit p-value of 0.0002, so it is a rough check.
+
 ![Nominal Z fit](Images/z_fit.png)
 
 ![Bump scan](Images/bump_scan.png)
@@ -41,6 +43,8 @@ Each variant changes one thing from the nominal fit. The group value is the larg
 | 5 likelihood type | 0.0005 |
 
 Indicative systematic estimate: 0.0550 GeV. Total error (statistical and systematic in quadrature): 0.0679 GeV.
+
+Three variants have a parameter within 3 percent of its allowed range from a fit limit, as `results/z_systematics.csv` records: the linear background (`c`, fitted at -0.984 against a lower limit of -1), the second-order background (`c1`, -0.853 against -0.9) and pt above 30 GeV (`Nb`, 198.9 events against a lower limit of 0). Minuit still marks these fits valid, so they count in the systematic estimate. The two background fits are in group 1, whose largest shift is 0.0120 GeV, and pt above 30 GeV gives the group 3 value of 0.0499 GeV, the largest of the five.
 
 ## Momentum scale check at two masses
 
@@ -158,6 +162,8 @@ jupyter nbconvert --to notebook --execute --inplace 1_Z_Boson_Analysis.ipynb
 ```bash
 python check_consistency.py
 ```
+
+Tested with Python 3.12.5 on macOS.
 
 On my laptop the Z fit with its toys took about a quarter of a minute and the scan with its 500 toys about half a minute. The tests take a few seconds.
 
