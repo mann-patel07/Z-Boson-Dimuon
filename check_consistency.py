@@ -33,6 +33,7 @@ zf = json.loads((RES / "z_fit_nominal.json").read_text())
 ss = json.loads((RES / "scan_summary.json").read_text())
 ts = json.loads((RES / "z_toys_summary.json").read_text())
 jf = json.loads((RES / "jpsi_fit.json").read_text())
+wf = json.loads((RES / "z_width_free.json").read_text())
 sy = pd.read_csv(RES / "z_systematics.csv")
 sc = pd.read_csv(RES / "scale_check.csv").set_index("resonance")
 g = zf["gof"]
@@ -98,6 +99,16 @@ for name, dec in [("J/psi (Crystal Ball)", 5), ("J/psi (Gaussian variant)", 5), 
     if abs(float(row.group(3)) - round(100 * sc.loc[name, "relative_scale"], 3)) > 1e-9:
         failures.append(f"scale percent {name}")
 check("jpsi gof p", "goodness-of-fit p-value", jf["crystal_ball"]["gof"]["p_value"], 4)
+
+# free-width fit
+check("width", "The free-width fit gives a width of", wf["width"], 3)
+check("width Hesse error", "with a Hesse error of", wf["width_hesse_error"], 3)
+check("width reference", "against the reference width of", wf["reference_width"], 4)
+check("width difference in se", "against the reference width of 2.4955 GeV, a difference of", wf["difference_in_se"], 2)
+check("width correlation", "(correlation", wf["correlation_width_sigma"], 2)
+checked += 1
+if not wf["valid"] or wf["at_limit"] or "valid and not at a limit" not in README:
+    failures.append("width fit: README says valid and not at a limit, results disagree")
 
 # scan
 check("scan max z", "Largest local significance:", ss["observed_max_z_local"], 3)

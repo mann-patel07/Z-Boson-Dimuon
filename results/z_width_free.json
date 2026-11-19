@@ -1,0 +1,16 @@
+{
+  "width": 2.9485229818918754,
+  "width_hesse_error": 0.19101056846217013,
+  "width_minos_lower": -0.19477656431239349,
+  "width_minos_upper": 0.18797716681048598,
+  "width_minos_valid": true,
+  "valid": true,
+  "at_limit": false,
+  "at_limit_params": [],
+  "reference_width": 2.4955,
+  "difference_GeV": 0.4530229818918756,
+  "difference_in_se": 2.3717168402731463,
+  "sigma": 1.0879835840135867,
+  "sigma_hesse_error": 0.1155465118825581,
+  "correlation_width_sigma": -0.8515611560104628
+}

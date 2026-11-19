@@ -90,6 +90,30 @@ def main():
         if r["group"] != "nominal" and r["rerun"]:
             log(f"Variant '{r['description']}' needed the 10 percent rerun.")
     sysdf.to_csv(RES / "z_systematics.csv", index=False)
+
+    # ---- width from the free-width fit (same nominal selection as the nominal fit)
+    wmodel = dimuon.build_model("z_free_width", a, b, len(m))
+    wres = dimuon.fit_unbinned(m, wmodel, do_minos=True)
+    # fit_unbinned runs Minos for the mass only, so the width Minos errors and the
+    # correlation come from the same fit repeated on a Minuit object that is kept
+    wmin = dimuon._make_minuit(dimuon._unbinned_nll(wmodel, m), wmodel, 1.1 if wres["rerun"] else 1.0)
+    wmin.migrad()
+    wmin.hesse()
+    wmin.minos("width")
+    assert abs(wmin.values["width"] - wres["values"]["width"]) < 1e-6, "repeated width fit differs from fit_unbinned"
+    wme = wmin.merrors["width"]
+    width_diff = wres["values"]["width"] - config.PDG_GAMMA_Z
+    width_json = {
+        "width": wres["values"]["width"], "width_hesse_error": wres["errors"]["width"],
+        "width_minos_lower": float(wme.lower), "width_minos_upper": float(wme.upper),
+        "width_minos_valid": bool(wme.is_valid),
+        "valid": wres["valid"], "at_limit": wres["at_limit"], "at_limit_params": wres["at_limit_params"],
+        "reference_width": config.PDG_GAMMA_Z,
+        "difference_GeV": width_diff, "difference_in_se": width_diff / wres["errors"]["width"],
+        "sigma": wres["values"]["sigma"], "sigma_hesse_error": wres["errors"]["sigma"],
+        "correlation_width_sigma": float(wmin.covariance.correlation()["width", "sigma"]) if wres["has_covariance"] else None,
+    }
+    (RES / "z_width_free.json").write_text(json.dumps(width_json, indent=2))
     groups = {}
     for g in ["1 background shape", "2 fit range", "3 muon pt threshold", "4 signal model", "5 likelihood type"]:
         sub = sysdf[sysdf.group == g]

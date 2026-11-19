@@ -44,7 +44,9 @@ Each variant changes one thing from the nominal fit. The group value is the larg
 
 Indicative systematic estimate: 0.0550 GeV. Total error (statistical and systematic in quadrature): 0.0679 GeV.
 
-Three variants have a parameter within 3 percent of its allowed range from a fit limit, as `results/z_systematics.csv` records: the linear background (`c`, fitted at -0.984 against a lower limit of -1), the second-order background (`c1`, -0.853 against -0.9) and pt above 30 GeV (`Nb`, 198.9 events against a lower limit of 0). Minuit still marks these fits valid, so they count in the systematic estimate. The two background fits are in group 1, whose largest shift is 0.0120 GeV, and pt above 30 GeV gives the group 3 value of 0.0499 GeV, the largest of the five.
+The free-width fit gives a width of 2.949 GeV with a Hesse error of 0.191 GeV, against the reference width of 2.4955 GeV, a difference of 2.37 standard errors. The fit is valid and not at a limit, and the width and the resolution are strongly correlated in it (correlation -0.85). The width fit is in `results/z_width_free.json`.
+
+Three variants have a parameter within 3 percent of its allowed range from a fit limit, as `results/z_systematics.csv` records: the linear background (`c`, fitted at -0.984 against a lower limit of -1), the second-order background (`c1`, -0.853 against -0.9) and pt above 30 GeV (`Nb`, 198.9 events against a lower limit of 0). Minuit still marks these fits valid, so they count in the systematic estimate. The limits on `c` and `Nb` are physical edges: the linear background density is proportional to 1 + c x for x from -1 to 1, so it reaches zero at the upper edge of the range at c = -1, and `Nb` is an event count that cannot go below 0. The `c1` limit is a range setting and not an edge of that kind. With the fitted c2 of -0.252, the second-order background is already slightly negative at the upper edge of the range (1 + c1 x + c2 (2x^2 - 1) is -0.105 at 110 GeV), so this variant fits the background poorly there. A refit with `c1` limits of -1.5 to 1.5 is valid, has no parameter near a limit, and moves the mass by 0.0001 GeV. The two background fits are in group 1, whose largest shift is 0.0120 GeV, and pt above 30 GeV gives the group 3 value of 0.0499 GeV, the largest of the five.
 
 ## Momentum scale check at two masses
 
@@ -125,6 +127,7 @@ Data: CERN Open Data record 5201, "Events with two muons from 2011 (Primary data
 - `results/cutflow.csv`: events after every cut.
 - `results/z_fit_nominal.json`: nominal fit, goodness of fit, uncertainties.
 - `results/z_systematics.csv`: one row per variant.
+- `results/z_width_free.json`: width, resolution and correlation from the free-width fit.
 - `results/z_toys.csv` and `results/z_toys_summary.json`: toy fits and the pull summary.
 - `results/jpsi_fit.json` and `results/scale_check.csv`: J/psi fits and the two-mass scale check.
 - `results/scan_background_fit.json`, `results/scan_local.csv`, `results/scan_toys.csv`, `results/scan_summary.json`: bump scan.
