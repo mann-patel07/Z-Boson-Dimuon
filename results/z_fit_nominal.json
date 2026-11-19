@@ -39,17 +39,17 @@
   "mass": 90.79053839763128,
   "stat_error": 0.039796289516587535,
   "group_systematics": {
-    "1 background shape": 0.012015311277636442,
+    "1 background shape": 0.01123847750341156,
     "2 fit range": 0.019776285991753184,
     "3 muon pt threshold": 0.049871220512685,
     "4 signal model": 0.0015586755326921775,
     "5 likelihood type": 0.0004922080916003324
   },
-  "indicative_systematic": 0.05500254145376024,
-  "total_error": 0.06788979470922465,
+  "indicative_systematic": 0.054838082003921367,
+  "total_error": 0.06775662253357129,
   "reference_mass": 91.1879,
   "reference_error": 0.002,
   "difference_GeV": -0.39736160236871854,
   "difference_in_stat_se": -9.984890732164711,
-  "difference_in_total_se": -5.853038797224795
+  "difference_in_total_se": -5.864542645581815
 }

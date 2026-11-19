@@ -66,7 +66,7 @@ if agree and "do not agree" in README or (not agree and "so the two agree within
 
 # systematics table rows
 for _, r in sy.iterrows():
-    row = re.search(r"\| " + re.escape(r["group"]) + r" \| " + re.escape(r["description"]) + r" \| (\d+) \| ([\d.]+) \| ([+-][\d.]+) \|", README)
+    row = re.search(r"\| " + re.escape(r["group"]) + r" \| " + re.escape(r["description"].replace("|", "\\|")) + r" \| (\d+) \| ([\d.]+) \| ([+-][\d.]+) \|", README)
     checked += 3
     if not row:
         failures.append(f"systematics row missing: {r['description']}")
@@ -82,6 +82,20 @@ for k, v in zf["group_systematics"].items():
     checked += 1
     if not row or abs(float(row.group(1)) - round(v, 4)) > 1e-9:
         failures.append(f"group systematic {k}")
+# a variant counts in its group only if it is valid and its background shape is not negative
+for _, r in sy.iterrows():
+    checked += 1
+    expected_ok = bool(pd.isna(r["bkg_min"]) or r["bkg_min"] >= 0)
+    if bool(r["bkg_nonnegative"]) != expected_ok:
+        failures.append(f"bkg_nonnegative does not match bkg_min for {r['description']}")
+for k, v in zf["group_systematics"].items():
+    sub = sy[(sy.group == k) & sy.valid & sy.bkg_nonnegative]
+    checked += 2
+    if not len(sub) or abs(float(sub.shift_from_nominal.abs().max()) - v) > 1e-12:
+        failures.append(f"group {k} is not the largest shift among counted variants")
+    counted_all = sy[(sy.group == k) & (sy.shift_from_nominal.abs() == v)]
+    if len(counted_all) and not counted_all.bkg_nonnegative.any():
+        failures.append(f"group {k} takes its value from a variant with a negative background shape")
 check("total syst", "Indicative systematic estimate:", zf["indicative_systematic"], 4)
 check("total error", "Total error (statistical and systematic in quadrature):", zf["total_error"], 4)
 
@@ -115,10 +129,13 @@ check("scan max z", "Largest local significance:", ss["observed_max_z_local"], 3
 check("scan mass", "at a test mass of", ss["observed_mass"], 1)
 check("scan local p", "local p-value", ss["p_local"], 4)
 check("scan global p", "Global p-value from", ss["n_toys"], 0)
-m = re.search(r"pseudo-experiments: ([\d.]+)\.", README)
-checked += 1
+m = re.search(r"pseudo-experiments: ([\d.]+) \(Monte Carlo standard error ([\d.]+)\)\.", README)
+checked += 2
 if not m or abs(float(m.group(1)) - round(ss["p_global"], 4)) > 1e-9:
     failures.append("global p-value")
+mc_se = (ss["p_global"] * (1 - ss["p_global"]) / ss["n_toys"]) ** 0.5
+if not m or abs(float(m.group(2)) - round(mc_se, 3)) > 1e-9:
+    failures.append("global p-value Monte Carlo standard error")
 check("trials factor", "Trials factor (global p-value divided by local p-value):", ss["trials_factor"], 2)
 check("scan gof p", "Background-only goodness-of-fit p-value:", ss["background_gof_p_value"], 4)
 check("n test masses", "is moved over", ss["n_test_masses"], 0)

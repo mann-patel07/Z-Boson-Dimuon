@@ -28,9 +28,21 @@ def fit_variant(df, group, desc, pt_min=config.Z_PT_MIN, mrange=config.Z_RANGE, 
         res = dimuon.fit_binned(m, model, config.Z_BIN_WIDTH, do_minos=False)
     else:
         res = dimuon.fit_unbinned(m, model, do_minos=False)
+    # Lowest value of the background shape at the fitted parameters, on 2001 points over x in [-1, 1].
+    # This is the polynomial in dimuon.linear_pdf and dimuon.second_order_pdf (their normalization
+    # is positive, so it does not change the sign). The exponential background is always positive.
+    x = np.linspace(-1.0, 1.0, 2001)
+    v = res["values"]
+    if bkg == "lin":
+        bkg_min = float(np.min(1.0 + v["c"] * x))
+    elif bkg == "quad":
+        bkg_min = float(np.min(1.0 + v["c1"] * x + v["c2"] * (2.0 * x ** 2 - 1.0)))
+    else:
+        bkg_min = float("nan")
     return {"group": group, "description": desc, "events": int(len(m)), "mass": res["mass"],
             "error": res["mass_err"], "valid": res["valid"], "at_limit": res["at_limit"],
-            "at_limit_params": " ".join(res["at_limit_params"]), "rerun": res["rerun"]}
+            "at_limit_params": " ".join(res["at_limit_params"]), "rerun": res["rerun"],
+            "bkg_min": bkg_min, "bkg_nonnegative": bool(np.isnan(bkg_min) or bkg_min >= 0.0)}
 
 
 def toy_job(args):
@@ -85,6 +97,9 @@ def main():
     for _, r in sysdf.iterrows():
         if not r["valid"]:
             log(f"Variant '{r['description']}' is not a valid fit and is excluded from the systematic totals.")
+        if r["valid"] and not r["bkg_nonnegative"]:
+            log(f"Variant '{r['description']}': the background shape is negative at the fitted parameters "
+                f"(lowest value {r['bkg_min']:.4f}), so the variant is excluded from the systematic totals.")
         if r["at_limit_params"]:
             log(f"Variant '{r['description']}': parameter(s) at a limit: {r['at_limit_params']}. Fit kept as valid by the Minuit flag.")
         if r["group"] != "nominal" and r["rerun"]:
@@ -117,7 +132,8 @@ def main():
     groups = {}
     for g in ["1 background shape", "2 fit range", "3 muon pt threshold", "4 signal model", "5 likelihood type"]:
         sub = sysdf[sysdf.group == g]
-        groups[g] = dimuon.group_systematic(sub["shift_from_nominal"].tolist(), sub["valid"].tolist())
+        counted = (sub["valid"] & sub["bkg_nonnegative"]).tolist()
+        groups[g] = dimuon.group_systematic(sub["shift_from_nominal"].tolist(), counted)
     syst = dimuon.total_systematic(list(groups.values()))
     stat = nom["mass_err"]
     total = float(np.sqrt(stat ** 2 + syst ** 2))

@@ -4,9 +4,9 @@ I fit the Z boson mass in 5064 selected dimuon events from public CMS data with 
 
 ## Headline result
 
-- Z mass from the nominal fit: **90.7905 GeV**, statistical error 0.0398 GeV, indicative systematic estimate 0.0550 GeV.
+- Z mass from the nominal fit: **90.7905 GeV**, statistical error 0.0398 GeV, indicative systematic estimate 0.0548 GeV.
 - Reference value (Particle Data Group): 91.1879 GeV.
-- Difference (fit minus reference): -0.3974 GeV, which is -9.98 statistical standard errors and -5.85 total standard errors.
+- Difference (fit minus reference): -0.3974 GeV, which is -9.98 statistical standard errors and -5.86 total standard errors.
 - Goodness of fit of the nominal fit: chi-square 102.05 for 72 degrees of freedom, p-value 0.0114.
 
 The fitted mass is lower than the reference value by more than my total uncertainty, so the two do not agree within my uncertainties. Likely reasons are the missing final-state radiation in the model and an uncalibrated muon momentum scale. These are likely reasons, not proven ones.
@@ -19,7 +19,7 @@ The nominal fit fixes the Z width at 2.4955 GeV, so it measures the mass and not
 
 ## Systematic variants
 
-Each variant changes one thing from the nominal fit. The group value is the largest absolute shift among the valid variants of that group. The detector-region row is a different sample, so its difference includes statistical fluctuation and it is not added to the total. The indicative systematic estimate is the quadrature sum of the five group values. It covers only my modelling choices, not detector calibration.
+Each variant changes one thing from the nominal fit. The group value is the largest absolute shift among the variants of that group that are valid and whose background shape is not negative. The detector-region row is a different sample, so its difference includes statistical fluctuation and it is not added to the total. The indicative systematic estimate is the quadrature sum of the five group values. It covers only my modelling choices, not detector calibration.
 
 | Group | Variant | Events | Mass (GeV) | Shift from nominal (GeV) |
 |---|---|---|---|---|
@@ -32,21 +32,21 @@ Each variant changes one thing from the nominal fit. The group value is the larg
 | 3 muon pt threshold | pt > 30 GeV | 3878 | 90.8404 | +0.0499 |
 | 4 signal model | width free | 5064 | 90.7890 | -0.0016 |
 | 5 likelihood type | binned Poisson likelihood | 5064 | 90.7900 | -0.0005 |
-| 6 detector region (not in total) | both muons |eta| < 1.2 | 2162 | 90.7920 | +0.0015 |
+| 6 detector region (not in total) | both muons \|eta\| < 1.2 | 2162 | 90.7920 | +0.0015 |
 
 | Group | Largest shift (GeV) |
 |---|---|
-| 1 background shape | 0.0120 |
+| 1 background shape | 0.0112 |
 | 2 fit range | 0.0198 |
 | 3 muon pt threshold | 0.0499 |
 | 4 signal model | 0.0016 |
 | 5 likelihood type | 0.0005 |
 
-Indicative systematic estimate: 0.0550 GeV. Total error (statistical and systematic in quadrature): 0.0679 GeV.
+Indicative systematic estimate: 0.0548 GeV. Total error (statistical and systematic in quadrature): 0.0678 GeV.
 
 The free-width fit gives a width of 2.949 GeV with a Hesse error of 0.191 GeV, against the reference width of 2.4955 GeV, a difference of 2.37 standard errors. The fit is valid and not at a limit, and the width and the resolution are strongly correlated in it (correlation -0.85). The width fit is in `results/z_width_free.json`.
 
-Three variants have a parameter within 3 percent of its allowed range from a fit limit, as `results/z_systematics.csv` records: the linear background (`c`, fitted at -0.984 against a lower limit of -1), the second-order background (`c1`, -0.853 against -0.9) and pt above 30 GeV (`Nb`, 198.9 events against a lower limit of 0). Minuit still marks these fits valid, so they count in the systematic estimate. The limits on `c` and `Nb` are physical edges: the linear background density is proportional to 1 + c x for x from -1 to 1, so it reaches zero at the upper edge of the range at c = -1, and `Nb` is an event count that cannot go below 0. The `c1` limit is a range setting and not an edge of that kind. With the fitted c2 of -0.252, the second-order background is already slightly negative at the upper edge of the range (1 + c1 x + c2 (2x^2 - 1) is -0.105 at 110 GeV), so this variant fits the background poorly there. A refit with `c1` limits of -1.5 to 1.5 is valid, has no parameter near a limit, and moves the mass by 0.0001 GeV. The two background fits are in group 1, whose largest shift is 0.0120 GeV, and pt above 30 GeV gives the group 3 value of 0.0499 GeV, the largest of the five.
+Three variants have a parameter within 3 percent of its allowed range from a fit limit, as `results/z_systematics.csv` records: the linear background (`c`, fitted at -0.984 against a lower limit of -1), the second-order background (`c1`, -0.853 against -0.9) and pt above 30 GeV (`Nb`, 198.9 events against a lower limit of 0). Minuit marks all three fits valid. The limits on `c` and `Nb` are physical edges: the linear background density is proportional to 1 + c x for x from -1 to 1, so it reaches zero at the upper edge of the range at c = -1, and `Nb` is an event count that cannot go below 0. At the fitted values the second-order background is negative near the upper edge of the range (the lowest value of 1 + c1 x + c2 (2x^2 - 1) is -0.105), so I leave that variant out of the systematic estimate, and the table still shows it. I added this rule after a review, so it is not in `PREREGISTRATION.md`. The linear background stays in, and its lowest value is 0.016. Group 1 is therefore the linear background alone, with a largest shift of 0.0112 GeV, and pt above 30 GeV gives the group 3 value of 0.0499 GeV, the largest of the five.
 
 ## Momentum scale check at two masses
 
@@ -65,7 +65,7 @@ The J/psi fits describe the data poorly (goodness-of-fit p-value 0.0002 for the 
 The scan covers 15 to 60 GeV, which contains no resonance I am fitting. A Gaussian with the relative width of the Z peak is moved over 87 test masses.
 
 - Largest local significance: 1.961 at a test mass of 26.0 GeV (local p-value 0.0250).
-- Global p-value from 500 background-only pseudo-experiments: 0.7884.
+- Global p-value from 500 background-only pseudo-experiments: 0.7884 (Monte Carlo standard error 0.018).
 - Trials factor (global p-value divided by local p-value): 31.58.
 - Background-only goodness-of-fit p-value: 0.9361.
 
@@ -83,7 +83,7 @@ The global number is the one that matters, because the scan looks at many places
 
 ## Pre-registration
 
-`PREREGISTRATION.md` was written before the data file was downloaded. It fixes the selections, models, variants, constants and the primary result. These choices were fixed before the data was downloaded and were not changed afterward. Two start values for the J/psi background and yields were not given there, and I added them to `config.py` later. They do not enter the Z fit or the scan.
+`PREREGISTRATION.md` was written before the data file was downloaded. It fixes the selections, models, variants, constants and the primary result. Two start values for the J/psi background and yields were not given there, and I added them to `config.py` later. They do not enter the Z fit or the scan. The commit history here does not show this order, because I uploaded the finished project in a few commits.
 
 ## Tests
 
@@ -135,6 +135,8 @@ Data: CERN Open Data record 5201, "Events with two muons from 2011 (Primary data
 - `Images/`: figures written by the notebook.
 
 ## How to run from a fresh clone
+
+`python download_data.py` is optional, because `data/` already has the file. If the file is there, the script prints that nothing is to do and stops. `--refresh` downloads it again.
 
 ```bash
 python3 -m venv .venv
